@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{0397ABF6-2B9B-46BA-87B0-FB95BDA15A97}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <RootNamespace>RoutineOfPower</RootNamespace>
     <AssemblyName>RoutineOfPower</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
@@ -13,7 +13,7 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -31,22 +31,95 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="apple">
+      <HintPath>D:\qq\apple.exe</HintPath>
+    </Reference>
+    <Reference Include="GreyMagic">
+      <HintPath>D:\qq\GreyMagic.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>D:\qq\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>D:\qq\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="Udis86Net">
+      <HintPath>D:\qq\Udis86Net.dll</HintPath>
+    </Reference>
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="Core\LogicProviders\AoeTargetLogic.cs" />
+    <Compile Include="Core\LogicProviders\AurasLogic.cs" />
+    <Compile Include="Core\LogicProviders\BuffLogic.cs" />
+    <Compile Include="Core\LogicProviders\ILogicHandler.cs" />
+    <Compile Include="Core\LogicProviders\OffenseLogic.cs" />
+    <Compile Include="Core\LogicProviders\PoeHelpers.cs" />
+    <Compile Include="Core\LogicProviders\SingleTargetLogic.cs" />
+    <Compile Include="Core\LogicProviders\GolemSummonerLogic.cs" />
+    <Compile Include="Core\LogicProviders\TotemLogic.cs" />
+    <Compile Include="Core\RoutineOfPower.cs" />
+    <Compile Include="Core\Settings\AoeTargetLogicSettings.cs" />
+    <Compile Include="Core\Settings\LogicHandlerSettings.cs" />
+    <Compile Include="Core\Settings\LogicSettingsWrapper.cs" />
+    <Compile Include="Core\Settings\OffenseLogicSettings.cs" />
+    <Compile Include="Core\Settings\RoutineSettings.cs" />
+    <Compile Include="Core\SkillHandlers\AuraCastHandler.cs" />
+    <Compile Include="Core\SkillHandlers\ChannelingSkill.cs" />
+    <Compile Include="Core\SkillHandlers\DefaultSkillHandler.cs" />
+    <Compile Include="Core\SkillHandlers\SingleCastHandler.cs" />
+    <Compile Include="Core\SkillHandlers\SkillHandler.cs" />
+    <Compile Include="Core\SkillHandlers\SkillWrapper.cs" />
+    <Compile Include="Core\SkillHandlers\TimeoutSkillHandler.cs" />
+    <Compile Include="Core\TargetHandler.cs" />
+    <Compile Include="GUI\AoeTargetGui.xaml.cs">
+      <DependentUpon>AoeTargetGui.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\SingleTargetGui.xaml.cs">
+      <DependentUpon>SingleTargetGui.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Views\AbstractViewer.cs" />
+    <Compile Include="Views\MainGuiViewer.cs" />
+    <Compile Include="Views\SingleTargetView.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Page Include="GUI\AoeTargetGui.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\MainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\SingleTargetGui.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
