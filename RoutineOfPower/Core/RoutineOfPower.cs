@@ -49,6 +49,12 @@ namespace RoutineOfPower.Core
                 return MessageResult.Processed;
             }
 
+            if (message.Id == "GetCombatRange")
+            {
+                message.AddOutput(this, RoutineSettings.Instance.CombatRange);
+                return MessageResult.Processed;
+            }
+
             var wasProcessed = false;
             foreach (var handler in logicHandlers.Where(handler => handler.Enabled))
                 if (handler.Message(message) == MessageResult.Processed)

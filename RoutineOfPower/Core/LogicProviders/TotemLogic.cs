@@ -8,6 +8,7 @@ using Loki.Bot.Pathfinding;
 using Loki.Game;
 using Loki.Game.Objects;
 using RoutineOfPower.Core.SkillHandlers;
+using RoutineOfPower.Core.SkillHandlers.Decorators;
 
 namespace RoutineOfPower.Core.LogicProviders
 {
@@ -40,10 +41,13 @@ namespace RoutineOfPower.Core.LogicProviders
         public void Start()
         {
             totemSlot = null;
-            var totemSkill = PoeHelpers.GetSkillBarSkill(skill => skill.IsTotem && !skill.IsTrap && !skill.IsMine).FirstOrDefault();
+            var totemSkill = PoeHelpers.GetSkillbarSkills(skill => skill.IsTotem && !skill.IsTrap && !skill.IsMine).FirstOrDefault();
             if (totemSkill != null)
             {
-                totemSlot = new SkillWrapper(totemSkill.Slot, new TimeoutSkillHandler(4000, ShouldPlaceTotem));
+                totemSlot = new SkillWrapper(totemSkill.Slot, 
+                    new SingleCastHandler()
+                    .AddDecorator(new TimeoutDecorator(4000))
+                    .AddDecorator(new ConditionalDecorator(ShouldPlaceTotem)));
             }
         }
 

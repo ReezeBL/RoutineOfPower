@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using log4net;
-using Loki.Bot;
 using Loki.Common;
 using Loki.Game;
 using Loki.Game.Objects;
 using RoutineOfPower.Core.Settings;
 
-namespace RoutineOfPower.Core.LogicProviders
+namespace RoutineOfPower.Core
 {
     public static class PoeHelpers
     {
@@ -35,9 +34,14 @@ namespace RoutineOfPower.Core.LogicProviders
             return false;
         }
 
-        public static IEnumerable<Skill> GetSkillBarSkill(Func<Skill, bool> predicate)
+        public static IEnumerable<Skill> GetSkillbarSkills(Func<Skill, bool> predicate)
         {
             return LokiPoe.InGameState.SkillBarHud.SkillBarSkills.Where(skill => skill != null && predicate(skill));
+        }
+
+        public static IEnumerable<Skill> GetSkillbarSkills()
+        {
+            return LokiPoe.InGameState.SkillBarHud.SkillBarSkills.Where(skill => skill != null);
         }
     }
 }

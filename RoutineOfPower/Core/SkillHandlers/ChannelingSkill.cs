@@ -19,7 +19,7 @@ namespace RoutineOfPower.Core.SkillHandlers
         }
 
 
-        protected override async Task<bool> UseAt(int slot, Vector2i position, bool inPlace)
+        public override async Task<bool> UseAt(int slot, Vector2i position, bool inPlace)
         {
             var skill = LokiPoe.InGameState.SkillBarHud.Slot(slot);
 

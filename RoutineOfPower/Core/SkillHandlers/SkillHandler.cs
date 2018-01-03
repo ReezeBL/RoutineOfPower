@@ -5,6 +5,7 @@ using log4net;
 using Loki.Common;
 using Loki.Game;
 using Loki.Game.Objects;
+using RoutineOfPower.Core.SkillHandlers.Decorators;
 
 namespace RoutineOfPower.Core.SkillHandlers
 {
@@ -29,6 +30,12 @@ namespace RoutineOfPower.Core.SkillHandlers
                 return false;
             }
             return true;
+        }
+
+        public SkillHandler AddDecorator(Decorator decorator)
+        {
+            decorator.SetHandler(this);
+            return decorator;
         }
 
         public static Skill ValidateSlot(int slot, bool inSkillBar = true)
@@ -61,7 +68,7 @@ namespace RoutineOfPower.Core.SkillHandlers
             return skill != null;
         }
 
-        protected abstract Task<bool> UseAt(int slot, Vector2i position, bool inPlace);
+        public abstract Task<bool> UseAt(int slot, Vector2i position, bool inPlace);
 
 
         public static SkillHandler GetSkillHandler(int slot)

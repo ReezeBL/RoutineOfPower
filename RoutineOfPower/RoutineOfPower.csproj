@@ -71,7 +71,7 @@
     <Compile Include="Core\LogicProviders\BuffLogic.cs" />
     <Compile Include="Core\LogicProviders\ILogicHandler.cs" />
     <Compile Include="Core\LogicProviders\OffenseLogic.cs" />
-    <Compile Include="Core\LogicProviders\PoeHelpers.cs" />
+    <Compile Include="Core\PoeHelpers.cs" />
     <Compile Include="Core\LogicProviders\SingleTargetLogic.cs" />
     <Compile Include="Core\LogicProviders\GolemSummonerLogic.cs" />
     <Compile Include="Core\LogicProviders\TotemLogic.cs" />
@@ -81,13 +81,15 @@
     <Compile Include="Core\Settings\LogicSettingsWrapper.cs" />
     <Compile Include="Core\Settings\OffenseLogicSettings.cs" />
     <Compile Include="Core\Settings\RoutineSettings.cs" />
-    <Compile Include="Core\SkillHandlers\AuraCastHandler.cs" />
     <Compile Include="Core\SkillHandlers\ChannelingSkill.cs" />
+    <Compile Include="Core\SkillHandlers\Decorators\ConditionalDecorator.cs" />
+    <Compile Include="Core\SkillHandlers\Decorators\Decorator.cs" />
+    <Compile Include="Core\SkillHandlers\Decorators\DontHaveAuraDecorator.cs" />
+    <Compile Include="Core\SkillHandlers\Decorators\TimeoutDecorator.cs" />
     <Compile Include="Core\SkillHandlers\DefaultSkillHandler.cs" />
     <Compile Include="Core\SkillHandlers\SingleCastHandler.cs" />
     <Compile Include="Core\SkillHandlers\SkillHandler.cs" />
     <Compile Include="Core\SkillHandlers\SkillWrapper.cs" />
-    <Compile Include="Core\SkillHandlers\TimeoutSkillHandler.cs" />
     <Compile Include="Core\TargetHandler.cs" />
     <Compile Include="GUI\AoeTargetGui.xaml.cs">
       <DependentUpon>AoeTargetGui.xaml</DependentUpon>

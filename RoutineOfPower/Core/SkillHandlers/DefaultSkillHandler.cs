@@ -7,7 +7,7 @@ namespace RoutineOfPower.Core.SkillHandlers
 {
     public class DefaultSkillHandler : SkillHandler
     {
-        protected override async Task<bool> UseAt(int slot, Vector2i position, bool inPlace)
+        public override async Task<bool> UseAt(int slot, Vector2i position, bool inPlace)
         {
             var skill = ValidateSlot(slot);
             if (skill == null)

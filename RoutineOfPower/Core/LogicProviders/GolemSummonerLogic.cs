@@ -7,6 +7,7 @@ using Loki.Game;
 using Loki.Game.GameData;
 using Loki.Game.Objects;
 using RoutineOfPower.Core.SkillHandlers;
+using RoutineOfPower.Core.SkillHandlers.Decorators;
 
 namespace RoutineOfPower.Core.LogicProviders
 {
@@ -48,10 +49,13 @@ namespace RoutineOfPower.Core.LogicProviders
         public void Start()
         {
             golemSlot = null;
-            var golemSkill = PoeHelpers.GetSkillBarSkill(skill => Golems.Contains(skill.Name)).FirstOrDefault();
+            var golemSkill = PoeHelpers.GetSkillbarSkills(skill => Golems.Contains(skill.Name)).FirstOrDefault();
             if (golemSkill != null)
             {
-                golemSlot = new SkillWrapper(golemSkill.Slot, new TimeoutSkillHandler(4000, CanSummonGolem));
+                golemSlot = new SkillWrapper(golemSkill.Slot,
+                    new SingleCastHandler()
+                        .AddDecorator(new ConditionalDecorator(CanSummonGolem))
+                        .AddDecorator(new TimeoutDecorator(4000)));
             }
         }
 
