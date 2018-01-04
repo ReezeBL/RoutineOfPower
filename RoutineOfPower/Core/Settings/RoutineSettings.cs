@@ -10,15 +10,17 @@ namespace RoutineOfPower.Core.Settings
     public class RoutineSettings : JsonSettings
     {
         private static RoutineSettings instance;
-        [JsonIgnore] private ObservableCollection<ILogicHandler> handlersList;
-
-        [JsonRequired]
-        private Dictionary<string, LogicSettingsWrapper> logicSettings = new Dictionary<string, LogicSettingsWrapper>();
 
         private float combatRange = 75;
-        private bool needsToDisableAlwaysHighlight = true;
+        [JsonIgnore] private ObservableCollection<ILogicHandler> handlersList;
         private bool leaveFrame;
+
+        [JsonRequired]
+        private readonly Dictionary<string, LogicSettingsWrapper> logicSettings =
+            new Dictionary<string, LogicSettingsWrapper>();
+
         private int minMobsToTriggerCombat = 3;
+        private bool needsToDisableAlwaysHighlight = true;
 
         private RoutineSettings() : base(GetSettingsFilePath(Configuration.Instance.Name, "RoutineOfPower",
             $"{nameof(RoutineOfPower)}.json"))
@@ -86,17 +88,13 @@ namespace RoutineOfPower.Core.Settings
         public void GetSettingsForHandler(ILogicHandler handler)
         {
             if (logicSettings.TryGetValue(handler.Name, out var settignsWrapper))
-            {
                 settignsWrapper.SetToHandler(handler);
-            }
         }
 
         public void SetSettingsForHandler(ILogicHandler handler)
         {
             if (!logicSettings.TryGetValue(handler.Name, out var settignsWrapper))
-            {
                 logicSettings[handler.Name] = settignsWrapper = new LogicSettingsWrapper();
-            }
             settignsWrapper.SetFromHandler(handler);
         }
     }

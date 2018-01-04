@@ -6,8 +6,8 @@ namespace RoutineOfPower.Core.SkillHandlers
 {
     public class SkillWrapper
     {
-        private readonly int slot;
         private readonly SkillHandler handler;
+        private readonly int slot;
 
         public SkillWrapper(int slot, SkillHandler handler)
         {

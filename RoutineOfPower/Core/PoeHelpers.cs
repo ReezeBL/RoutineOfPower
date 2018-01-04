@@ -4,6 +4,7 @@ using System.Linq;
 using log4net;
 using Loki.Common;
 using Loki.Game;
+using Loki.Game.GameData;
 using Loki.Game.Objects;
 using RoutineOfPower.Core.Settings;
 
@@ -42,6 +43,26 @@ namespace RoutineOfPower.Core
         public static IEnumerable<Skill> GetSkillbarSkills()
         {
             return LokiPoe.InGameState.SkillBarHud.SkillBarSkills.Where(skill => skill != null);
+        }
+
+        public static bool HasDangerousNeighbours(Vector2i position, IEnumerable<Monster> monsters)
+        {
+            var normalMonstersCount = 0;
+            var magicMonsterCount = 0;
+            var strongMonsterCount = 0;
+
+            foreach (var monster in monsters)
+            {
+                var distance = position.DistanceF(monster.Position);
+                if (distance <= 20 && monster.Rarity == Rarity.Normal)
+                    normalMonstersCount++;
+                else if (distance <= 25 && monster.Rarity == Rarity.Magic)
+                    magicMonsterCount++;
+                else if (distance <= 25 && monster.Rarity == Rarity.Rare)
+                    strongMonsterCount++;
+            }
+
+            return normalMonstersCount >= 10 || magicMonsterCount >= 5 || strongMonsterCount >= 2;
         }
     }
 }

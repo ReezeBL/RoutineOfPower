@@ -24,6 +24,7 @@ namespace RoutineOfPower.Core.Settings
         public int MinMonstersToAoe { get; set; }
 
         [JsonIgnore]
-        public List<Rarity> PossibleRarities { get; } = new List<Rarity>{Rarity.Normal, Rarity.Magic, Rarity.Rare, Rarity.Unique};
+        public List<Rarity> PossibleRarities { get; } =
+            new List<Rarity> {Rarity.Normal, Rarity.Magic, Rarity.Rare, Rarity.Unique};
     }
 }

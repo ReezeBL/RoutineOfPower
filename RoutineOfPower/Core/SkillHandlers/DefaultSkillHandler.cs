@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Loki.Bot;
 using Loki.Common;
 using Loki.Game;
 
@@ -13,7 +12,6 @@ namespace RoutineOfPower.Core.SkillHandlers
             if (skill == null)
                 return false;
 
-            await Coroutines.FinishCurrentAction();
             return InternalUse(LokiPoe.InGameState.SkillBarHud.BeginUseAt, slot, inPlace, position);
         }
     }

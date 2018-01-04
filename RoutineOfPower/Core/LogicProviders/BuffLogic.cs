@@ -65,11 +65,13 @@ namespace RoutineOfPower.Core.LogicProviders
         public async Task<LogicResult> CombatHandling(IList<Monster> targets)
         {
             cachedTargets = targets;
+
+            if (PoeHelpers.HasDangerousNeighbours(LokiPoe.MyPosition, targets))
+                return LogicResult.Unprovided;
+
             foreach (var slot in buffSlots)
-            {
                 if (await slot.Use())
                     return LogicResult.Provided;
-            }
 
             return LogicResult.Unprovided;
         }
@@ -82,25 +84,10 @@ namespace RoutineOfPower.Core.LogicProviders
 
         private bool CheckMonsterCount(int slot)
         {
-            if (cachedTargets == null)
+            var bestTarget = cachedTargets.FirstOrDefault();
+            if (bestTarget == null)
                 return false;
-
-            var normalMonstersCount = 0;
-            var magicMonsterCount = 0;
-            var strongMonsterCount = 0;
-
-            foreach (var monster in cachedTargets)
-            {
-                var distance = monster.Distance;
-                if (distance <= 25 && monster.Rarity == Rarity.Normal)
-                    normalMonstersCount++;
-                else if (distance <= 40 && monster.Rarity == Rarity.Magic)
-                    magicMonsterCount++;
-                else if (distance <= 60 && monster.Rarity >= Rarity.Rare)
-                    strongMonsterCount++;
-            }
-
-            return normalMonstersCount >= 15 || magicMonsterCount >= 3 || strongMonsterCount >= 1;
+            return bestTarget.Rarity >= Rarity.Rare || PoeHelpers.HasDangerousNeighbours(bestTarget.Position, cachedTargets);
         }
     }
 }

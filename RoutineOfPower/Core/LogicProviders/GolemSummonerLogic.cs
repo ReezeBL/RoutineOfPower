@@ -6,6 +6,7 @@ using Loki.Bot;
 using Loki.Game;
 using Loki.Game.GameData;
 using Loki.Game.Objects;
+using RoutineOfPower.Core.Settings;
 using RoutineOfPower.Core.SkillHandlers;
 using RoutineOfPower.Core.SkillHandlers.Decorators;
 
@@ -21,6 +22,8 @@ namespace RoutineOfPower.Core.LogicProviders
             "Summon Stone Golem",
             "Summon Lightning Golem"
         };
+
+        private readonly GolemSummonerSettings settings = new GolemSummonerSettings();
 
         private SkillWrapper golemSlot;
 
@@ -39,24 +42,15 @@ namespace RoutineOfPower.Core.LogicProviders
         {
         }
 
-        private static bool CanSummonGolem(int slot)
-        {
-            var skill = LokiPoe.InGameState.SkillBarHud.Slot(slot);
-            var max = skill.GetStat(StatTypeGGG.NumberOfGolemsAllowed);
-            return skill.NumberDeployed < max;
-        }
-
         public void Start()
         {
             golemSlot = null;
             var golemSkill = PoeHelpers.GetSkillbarSkills(skill => Golems.Contains(skill.Name)).FirstOrDefault();
             if (golemSkill != null)
-            {
                 golemSlot = new SkillWrapper(golemSkill.Slot,
                     new SingleCastHandler()
                         .AddDecorator(new ConditionalDecorator(CanSummonGolem))
                         .AddDecorator(new TimeoutDecorator(4000)));
-            }
         }
 
         public async Task<LogicResult> OutCombatHandling()
@@ -66,7 +60,17 @@ namespace RoutineOfPower.Core.LogicProviders
 
         public async Task<LogicResult> CombatHandling(IList<Monster> targets)
         {
-            return await HandleSummon();
+            if (settings.SummonInCombat)
+                return await HandleSummon();
+
+            return await Task.FromResult(LogicResult.Unprovided);
+        }
+
+        private static bool CanSummonGolem(int slot)
+        {
+            var skill = LokiPoe.InGameState.SkillBarHud.Slot(slot);
+            var max = skill.GetStat(StatTypeGGG.NumberOfGolemsAllowed);
+            return skill.NumberDeployed < max;
         }
 
         private async Task<LogicResult> HandleSummon()

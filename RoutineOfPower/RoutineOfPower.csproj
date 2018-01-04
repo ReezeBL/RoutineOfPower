@@ -77,10 +77,12 @@
     <Compile Include="Core\LogicProviders\TotemLogic.cs" />
     <Compile Include="Core\RoutineOfPower.cs" />
     <Compile Include="Core\Settings\AoeTargetLogicSettings.cs" />
+    <Compile Include="Core\Settings\GolemSummonerSettings.cs" />
     <Compile Include="Core\Settings\LogicHandlerSettings.cs" />
     <Compile Include="Core\Settings\LogicSettingsWrapper.cs" />
     <Compile Include="Core\Settings\OffenseLogicSettings.cs" />
     <Compile Include="Core\Settings\RoutineSettings.cs" />
+    <Compile Include="Core\Settings\TotemLogicSettings.cs" />
     <Compile Include="Core\SkillHandlers\ChannelingSkill.cs" />
     <Compile Include="Core\SkillHandlers\Decorators\ConditionalDecorator.cs" />
     <Compile Include="Core\SkillHandlers\Decorators\Decorator.cs" />

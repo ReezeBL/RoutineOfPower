@@ -38,19 +38,14 @@ namespace RoutineOfPower.Core.SkillHandlers
             return decorator;
         }
 
-        public static Skill ValidateSlot(int slot, bool inSkillBar = true)
+        protected static Skill ValidateSlot(int slot, bool inSkillBar = true)
         {
             if (slot == -1)
                 return null;
             var skill = LokiPoe.InGameState.SkillBarHud.Slot(slot);
 
-            var error = string.Empty;
-
-            if (skill == null || !skill.CanUseEx(out error, inSkillBar))
-            {
-                Log.Error($"[Rotutine] Cant cast skill: {error}");
+            if (skill == null || !skill.CanUseEx(out _, inSkillBar))
                 return null;
-            }
 
             return skill;
         }

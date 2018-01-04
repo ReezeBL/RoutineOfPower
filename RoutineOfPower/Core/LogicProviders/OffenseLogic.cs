@@ -62,7 +62,9 @@ namespace RoutineOfPower.Core.LogicProviders
             var canSee = ExilePather.CanObjectSee(LokiPoe.Me, cachedPosition, !RoutineSettings.Instance.LeaveFrame);
             var pathDistance = ExilePather.PathDistance(myPosition, cachedPosition,
                 dontLeaveFrame: !RoutineSettings.Instance.LeaveFrame);
-            
+            var hasProximity = monster.HasProximityShield;
+
+
             var skipPathing = monster.Rarity == Rarity.Unique &&
                               (monster.Metadata.Contains("KitavaBoss/Kitava") ||
                                monster.Metadata.Contains("VaalSpiderGod/Arakaali"));
@@ -81,6 +83,7 @@ namespace RoutineOfPower.Core.LogicProviders
                 return false;
             }
 
+
             if (!canSee && !skipPathing)
             {
                 if (!PlayerMover.MoveTowards(cachedPosition))
@@ -88,9 +91,11 @@ namespace RoutineOfPower.Core.LogicProviders
                 return true;
             }
 
-            if (distance > Settings.Range || distance > 10 && monster.HasProximityShield)
+
+            if (distance > Settings.Range || distance > 10 && hasProximity)
             {
-                var rangedLocation = myPosition.GetPointAtDistanceAfterThis(cachedPosition, distance / 2f);
+                var range = hasProximity ? 10 : Settings.Range;
+                var rangedLocation = myPosition.GetPointAtDistanceBeforeEnd(cachedPosition, range);
                 if (!PlayerMover.MoveTowards(rangedLocation))
                     Log.ErrorFormat("[Logic] MoveTowards failed for {0}.", rangedLocation);
                 return true;
@@ -98,8 +103,10 @@ namespace RoutineOfPower.Core.LogicProviders
 
             PoeHelpers.DisableAlwaysHiglight();
 
-            if (flaskHook != null && flaskHook(monster.Rarity, (int) monster.HealthPercentTotal))
-                return true;
+            //if (flaskHook != null && flaskHook(monster.Rarity, (int) monster.HealthPercentTotal))
+            //    return true;
+
+            flaskHook?.Invoke(monster.Rarity, (int)monster.HealthPercentTotal);
 
             var skill = LokiPoe.InGameState.SkillBarHud.Slot(Settings.Slot);
             if (skill != cachedSkill || cachedSkillHandler == null)
@@ -108,7 +115,9 @@ namespace RoutineOfPower.Core.LogicProviders
                 cachedSkillHandler = SkillHandler.GetSkillHandler(cachedSkill);
             }
 
-            var result = await cachedSkillHandler.HandleSkillAt(Settings.Slot, cachedPosition, Settings.AttackInPlace);
+
+            var result =
+                await cachedSkillHandler.HandleSkillAt(Settings.Slot, cachedPosition, Settings.AttackInPlace);
             return result;
         }
     }

@@ -24,7 +24,7 @@ namespace RoutineOfPower.Core.SkillHandlers.Decorators
         public override async Task<bool> UseAt(int slot, Vector2i position, bool inPlace)
         {
             var casted = await handler.UseAt(slot, position, inPlace);
-            if(casted)
+            if (casted)
                 timer.Restart();
             return casted;
         }
