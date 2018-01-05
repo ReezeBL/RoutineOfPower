@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using log4net;
+using Loki.Bot;
+using Loki.Bot.Pathfinding;
 using Loki.Common;
 using Loki.Game;
 using Loki.Game.GameData;
@@ -32,6 +34,7 @@ namespace RoutineOfPower.Core
                 LokiPoe.Input.SimulateKeyEvent(LokiPoe.Input.Binding.highlight_toggle, true, false, false);
                 return true;
             }
+
             return false;
         }
 
@@ -45,7 +48,70 @@ namespace RoutineOfPower.Core
             return LokiPoe.InGameState.SkillBarHud.SkillBarSkills.Where(skill => skill != null);
         }
 
-        public static bool HasDangerousNeighbours(Vector2i position, IEnumerable<Monster> monsters)
+        public static MoveResult MoveInRange(Monster monster, float minRange)
+        {
+            var cachedPosition = monster.Position;
+
+            var hasProximity = false;
+            var monsterId = -1;
+
+            try
+            {
+                hasProximity = monster.HasProximityShield;
+                monsterId = monster.Id;
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+
+
+            var distance = LokiPoe.MyPosition.Distance(ref cachedPosition);
+
+            var skipPathing = monster.Rarity == Rarity.Unique &&
+                              (monster.Metadata.Contains("KitavaBoss/Kitava") ||
+                               monster.Metadata.Contains("VaalSpiderGod/Arakaali"));
+
+            var canSee = ExilePather.CanObjectSee(LokiPoe.Me, cachedPosition, !RoutineSettings.Instance.LeaveFrame);
+            var pathDistance = ExilePather.PathDistance(LokiPoe.MyPosition, cachedPosition, dontLeaveFrame: !RoutineSettings.Instance.LeaveFrame);
+            
+
+            if (pathDistance.CompareTo(float.MaxValue) == 0 && !skipPathing)
+            {
+                Log.ErrorFormat("[Logic] Could not determine the path distance to the best target. Now blacklisting it.");
+                Blacklist.Add(monsterId, TimeSpan.FromMinutes(1), "Unable to pathfind to.");
+                return MoveResult.MoveFailed;
+            }
+
+            if (pathDistance > 2 * RoutineSettings.Instance.CombatRange && !skipPathing)
+            {
+                EnableAlwaysHiglight();
+                Blacklist.Add(monsterId, TimeSpan.FromSeconds(10), "Too far");
+                return MoveResult.TargetTooFar;
+            }
+
+
+            if (!canSee && !skipPathing)
+            {
+                if (!PlayerMover.MoveTowards(cachedPosition))
+                    Log.ErrorFormat("[Logic] MoveTowards failed for {0}.", cachedPosition);
+                return MoveResult.MoveFailed;
+            }
+
+
+            if (distance > minRange || distance > 10 && hasProximity)
+            {
+                var range = hasProximity ? 10 : minRange;
+                var rangedLocation = LokiPoe.MyPosition.GetPointAtDistanceBeforeEnd(cachedPosition, range);
+                if (!PlayerMover.MoveTowards(rangedLocation))
+                    Log.ErrorFormat("[Logic] MoveTowards failed for {0}.", rangedLocation);
+                return MoveResult.MoveFailed;
+            }
+
+            return MoveResult.MoveSuccseed;
+        }
+
+    public static bool HasDangerousNeighbours(Vector2i position, IEnumerable<Monster> monsters)
         {
             var normalMonstersCount = 0;
             var magicMonsterCount = 0;
@@ -54,15 +120,27 @@ namespace RoutineOfPower.Core
             foreach (var monster in monsters)
             {
                 var distance = position.DistanceF(monster.Position);
-                if (distance <= 20 && monster.Rarity == Rarity.Normal)
+                var attackingMe = monster.HasCurrentAction && monster.CurrentAction.Target == LokiPoe.Me;
+                if ((distance <= 40 || attackingMe) && monster.Rarity == Rarity.Normal)
                     normalMonstersCount++;
-                else if (distance <= 25 && monster.Rarity == Rarity.Magic)
+                else if ((distance <= 50 || attackingMe) && monster.Rarity == Rarity.Magic)
                     magicMonsterCount++;
-                else if (distance <= 25 && monster.Rarity == Rarity.Rare)
+                else if ((distance <= 50 || attackingMe) && monster.Rarity == Rarity.Rare)
                     strongMonsterCount++;
             }
 
-            return normalMonstersCount >= 10 || magicMonsterCount >= 5 || strongMonsterCount >= 2;
+            var manyNormalMonsters = normalMonstersCount >= 8;
+            var manyMagicMonsters = magicMonsterCount >= 5;
+            var manyRareMonsters = strongMonsterCount >= 2;
+
+            return manyRareMonsters || manyNormalMonsters || manyMagicMonsters;
         }
+    }
+
+    public enum MoveResult
+    {
+        MoveFailed,
+        TargetTooFar,
+        MoveSuccseed
     }
 }

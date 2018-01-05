@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using log4net;
 using Loki.Bot;
-using Loki.Bot.Pathfinding;
 using Loki.Common;
 using Loki.Game;
 using Loki.Game.GameData;
@@ -55,58 +54,36 @@ namespace RoutineOfPower.Core.LogicProviders
 
         protected async Task<bool> ProccessTarget(Monster monster)
         {
+            if (!monster.IsActive)
+                return true;
+
             var cachedPosition = monster.Position;
-            var myPosition = LokiPoe.MyPosition;
+            
+            var moveResult = PoeHelpers.MoveInRange(monster, Settings.Range);
 
-            var distance = myPosition.Distance(ref cachedPosition);
-            var canSee = ExilePather.CanObjectSee(LokiPoe.Me, cachedPosition, !RoutineSettings.Instance.LeaveFrame);
-            var pathDistance = ExilePather.PathDistance(myPosition, cachedPosition,
-                dontLeaveFrame: !RoutineSettings.Instance.LeaveFrame);
-            var hasProximity = monster.HasProximityShield;
-
-
-            var skipPathing = monster.Rarity == Rarity.Unique &&
-                              (monster.Metadata.Contains("KitavaBoss/Kitava") ||
-                               monster.Metadata.Contains("VaalSpiderGod/Arakaali"));
-
-            if (pathDistance.CompareTo(float.MaxValue) == 0 && !skipPathing)
+            switch (moveResult)
             {
-                Log.ErrorFormat(
-                    "[Logic] Could not determine the path distance to the best target. Now blacklisting it.");
-                Blacklist.Add(monster.Id, TimeSpan.FromMinutes(1), "Unable to pathfind to.");
-                return true;
-            }
-
-            if (pathDistance > RoutineSettings.Instance.CombatRange && !skipPathing)
-            {
-                PoeHelpers.EnableAlwaysHiglight();
-                return false;
-            }
-
-
-            if (!canSee && !skipPathing)
-            {
-                if (!PlayerMover.MoveTowards(cachedPosition))
-                    Log.ErrorFormat("[Logic] MoveTowards failed for {0}.", cachedPosition);
-                return true;
-            }
-
-
-            if (distance > Settings.Range || distance > 10 && hasProximity)
-            {
-                var range = hasProximity ? 10 : Settings.Range;
-                var rangedLocation = myPosition.GetPointAtDistanceBeforeEnd(cachedPosition, range);
-                if (!PlayerMover.MoveTowards(rangedLocation))
-                    Log.ErrorFormat("[Logic] MoveTowards failed for {0}.", rangedLocation);
-                return true;
+                case MoveResult.TargetTooFar:
+                    return false;
+                case MoveResult.MoveFailed:
+                    return true;
+                case MoveResult.MoveSuccseed:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
 
             PoeHelpers.DisableAlwaysHiglight();
 
-            //if (flaskHook != null && flaskHook(monster.Rarity, (int) monster.HealthPercentTotal))
-            //    return true;
-
-            flaskHook?.Invoke(monster.Rarity, (int)monster.HealthPercentTotal);
+            //TODO: failing to get monster stats with exception sometimes, wtf
+            try
+            {
+                flaskHook?.Invoke(monster.Rarity, (int) monster.HealthPercentTotal);
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
 
             var skill = LokiPoe.InGameState.SkillBarHud.Slot(Settings.Slot);
             if (skill != cachedSkill || cachedSkillHandler == null)

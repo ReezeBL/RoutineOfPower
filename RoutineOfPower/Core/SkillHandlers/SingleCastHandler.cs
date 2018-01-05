@@ -9,15 +9,13 @@ namespace RoutineOfPower.Core.SkillHandlers
     {
         public override async Task<bool> UseAt(int slot, Vector2i position, bool inPlace)
         {
+            await Coroutines.FinishCurrentAction();
             var castResult = InternalUse(LokiPoe.InGameState.SkillBarHud.UseAt, slot, inPlace, position);
-            if (castResult)
-            {
-                await Coroutines.LatencyWait();
-                await Coroutines.FinishCurrentAction(false);
-                await Coroutines.LatencyWait();
-                return true;
-            }
-            return false;
+
+            if (!castResult) return false;
+
+            await Coroutines.FinishCurrentAction(false);
+            return true;
         }
     }
 }

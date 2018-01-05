@@ -38,6 +38,7 @@ namespace RoutineOfPower.Core.SkillHandlers
                 return true;
             }
 
+            await Coroutines.FinishCurrentAction();
             return InternalUse(LokiPoe.InGameState.SkillBarHud.BeginUseAt, slot, inPlace, position);
         }
     }

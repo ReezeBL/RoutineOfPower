@@ -32,7 +32,7 @@
                     <DataGrid.Columns>
                         <DataGridCheckBoxColumn Header="E" Binding="{Binding Enabled}"/>
                         <DataGridTextColumn Header = "Name" Binding="{Binding Name}" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="Priority" Binding="{Binding Priority}"/>
+                        <DataGridTextColumn Header="Priority" Binding="{Binding Priority}" SortDirection="Descending"/>
                     </DataGrid.Columns>
                 </DataGrid>
                 <Border Margin="5" BorderBrush="Black" BorderThickness="2" CornerRadius="4">

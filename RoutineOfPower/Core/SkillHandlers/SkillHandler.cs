@@ -44,8 +44,14 @@ namespace RoutineOfPower.Core.SkillHandlers
                 return null;
             var skill = LokiPoe.InGameState.SkillBarHud.Slot(slot);
 
-            if (skill == null || !skill.CanUseEx(out _, inSkillBar))
+            if (skill == null)
                 return null;
+
+            if (!skill.CanUseEx(out var error, inSkillBar))
+            {
+                //Log.Error($"Cant use {skill.Name}: {error}");
+                return null;
+            }
 
             return skill;
         }

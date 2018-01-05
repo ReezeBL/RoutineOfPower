@@ -126,6 +126,7 @@ namespace RoutineOfPower.Core
                         .OrderByDescending(handler => handler.Priority))
                         if (await handler.CombatHandling(targets) == LogicResult.Provided)
                             return LogicResult.Provided;
+                    Log.Error("Combat was triggered, but no logic provided!");
                 }
                 else
                 {
@@ -137,6 +138,11 @@ namespace RoutineOfPower.Core
             }
 
             return LogicResult.Unprovided;
+        }
+
+        public override string ToString()
+        {
+            return Name + ": " + Description;
         }
     }
 }
