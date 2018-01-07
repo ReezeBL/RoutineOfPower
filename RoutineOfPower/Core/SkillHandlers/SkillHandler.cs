@@ -17,6 +17,7 @@ namespace RoutineOfPower.Core.SkillHandlers
         {
             ["default"] = new ChannelingSkill(),
             ["bf"] = new ChannelingSkill(() => LokiPoe.Me.BladeFlurryCharges >= 6),
+            ["fb"] = new ChannelingSkill(() => LokiPoe.Me.FlameblastCharges >= 5),
             ["short"] = new SingleCastHandler()
         };
 
@@ -86,6 +87,8 @@ namespace RoutineOfPower.Core.SkillHandlers
             {
                 case "Blade Flurry":
                     return Handlers["bf"];
+                case "Flame Blast":
+                    return Handlers["fb"];
                 default:
                     return Handlers["default"];
             }

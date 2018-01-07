@@ -133,6 +133,7 @@ namespace RoutineOfPower.Core.LogicProviders
             }
 
             await caster.HandleSkillAt(auraSlot, LokiPoe.MyPosition, true);
+            await Coroutines.LatencyWait();
             return true;
         }
     }

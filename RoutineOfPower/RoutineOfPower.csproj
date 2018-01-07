@@ -72,6 +72,7 @@
     <Compile Include="Core\LogicProviders\ILogicHandler.cs" />
     <Compile Include="Core\LogicProviders\OffenseLogic.cs" />
     <Compile Include="Core\LogicProviders\WarcriesLogic.cs" />
+    <Compile Include="Core\Settings\Misc\TriggerSettings.cs" />
     <Compile Include="Core\PoeHelpers.cs" />
     <Compile Include="Core\LogicProviders\SingleTargetLogic.cs" />
     <Compile Include="Core\LogicProviders\GolemSummonerLogic.cs" />

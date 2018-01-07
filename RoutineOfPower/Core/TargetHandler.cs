@@ -49,6 +49,17 @@ namespace RoutineOfPower.Core
             combatTargeting.Update();
         }
 
+        public void Reset()
+        {
+            combatTargeting.ResetInclusionCalcuation();
+            combatTargeting.ResetWeightCalculation();
+
+            combatTargeting.WeightCalculation += TargetingWeightCalcuations;
+            combatTargeting.InclusionCalcuation += TargetingInclusionCalculations;
+        }
+
+        public Targeting Targeting => combatTargeting;
+
         private static void TargetingWeightCalcuations(NetworkObject entity, ref float weight)
         {
             weight -= entity.Distance;
