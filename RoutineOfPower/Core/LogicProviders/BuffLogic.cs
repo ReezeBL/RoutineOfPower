@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using Loki.Bot;
 using Loki.Game;
-using Loki.Game.GameData;
 using Loki.Game.Objects;
 using RoutineOfPower.Core.Settings;
 using RoutineOfPower.Core.SkillHandlers;

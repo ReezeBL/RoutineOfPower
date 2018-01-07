@@ -108,6 +108,9 @@ namespace RoutineOfPower.Core.LogicProviders
                 var result = LokiPoe.InGameState.SkillBarHud.SetSlot(auraSlot, cachedSkill);
                 if (result != LokiPoe.InGameState.SetSlotResult.None)
                     Log.Error($"[Rotutine] Failed to set skill slot: {result} {auraSlot}");
+
+                await Coroutines.LatencyWait(10);
+                return LogicResult.Provided;
             }
 
             return LogicResult.Unprovided;
@@ -133,7 +136,7 @@ namespace RoutineOfPower.Core.LogicProviders
             }
 
             await caster.HandleSkillAt(auraSlot, LokiPoe.MyPosition, true);
-            await Coroutines.LatencyWait();
+            await Coroutines.LatencyWait(10);
             return true;
         }
     }

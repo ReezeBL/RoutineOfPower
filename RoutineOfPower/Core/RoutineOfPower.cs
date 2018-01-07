@@ -97,7 +97,7 @@ namespace RoutineOfPower.Core
                 logicHandlers.Add(handler);
             }
 
-            RoutineSettings.Instance.HandlersList = new ObservableCollection<ILogicHandler>(logicHandlers);
+            RoutineSettings.Instance.HandlersList = new ObservableCollection<ILogicHandler>(logicHandlers.OrderByDescending(handler => handler.Priority));
         }
 
         public void Deinitialize()

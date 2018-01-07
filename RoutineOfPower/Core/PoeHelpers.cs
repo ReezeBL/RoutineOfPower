@@ -84,6 +84,7 @@ namespace RoutineOfPower.Core
                                monster.Metadata.Contains("VaalSpiderGod/Arakaali"));
 
             var canSee = ExilePather.CanObjectSee(LokiPoe.Me, cachedPosition, !RoutineSettings.Instance.LeaveFrame);
+            var blockedByDoor = ClosedDoorBetween(LokiPoe.Me, monster);
             var pathDistance = ExilePather.PathDistance(LokiPoe.MyPosition, cachedPosition, dontLeaveFrame: !RoutineSettings.Instance.LeaveFrame);
             
 
@@ -102,7 +103,7 @@ namespace RoutineOfPower.Core
             }
 
 
-            if (!canSee && !skipPathing)
+            if ((!canSee && !skipPathing) || blockedByDoor)
             {
                 if (!PlayerMover.MoveTowards(cachedPosition))
                     Log.ErrorFormat("[Logic] MoveTowards failed for {0}.", cachedPosition);
@@ -132,11 +133,11 @@ namespace RoutineOfPower.Core
             {
                 var distance = position.DistanceF(monster.Position);
                 var attackingMe = monster.HasCurrentAction && monster.CurrentAction.Target == LokiPoe.Me;
-                if ((distance <= 30 || attackingMe) && monster.Rarity == Rarity.Normal)
+                if ((distance <= 25 || attackingMe) && monster.Rarity == Rarity.Normal)
                     normalMonstersCount++;
-                else if ((distance <= 40 || attackingMe) && monster.Rarity == Rarity.Magic)
+                else if ((distance <= 30 || attackingMe) && monster.Rarity == Rarity.Magic)
                     magicMonsterCount++;
-                else if ((distance <= 40 || attackingMe) && monster.Rarity == Rarity.Rare)
+                else if ((distance <= 30 || attackingMe) && monster.Rarity == Rarity.Rare)
                     strongMonsterCount++;
             }
 
@@ -146,7 +147,35 @@ namespace RoutineOfPower.Core
 
             return manyRareMonsters || manyNormalMonsters || manyMagicMonsters;
         }
+
+        private static bool ClosedDoorBetween(NetworkObject start, NetworkObject end, int distanceFromPoint = 10, int stride = 10)
+        {
+            return ClosedDoorBetween(start.Position, end.Position, distanceFromPoint, stride);
+        }
+
+        private static bool ClosedDoorBetween(Vector2i start, Vector2i end, int distanceFromPoint = 10, int stride = 10)
+        {
+            var doors = LokiPoe.ObjectManager.AnyDoors.Where(d => !d.IsOpened).ToList();
+            if (!doors.Any())
+                return false;
+
+            var path = ExilePather.GetPointsOnSegment(start, end, RoutineSettings.Instance.LeaveFrame);
+
+            for (var i = 0; i < path.Count; i += stride)
+            {
+                foreach (var door in doors)
+                {
+                    if (door.Position.Distance(path[i]) <= distanceFromPoint)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
     }
+
+    
 
     public enum MoveResult
     {
