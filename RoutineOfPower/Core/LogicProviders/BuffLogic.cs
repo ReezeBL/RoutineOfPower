@@ -6,8 +6,10 @@ using Loki.Bot;
 using Loki.Game;
 using Loki.Game.GameData;
 using Loki.Game.Objects;
+using RoutineOfPower.Core.Settings;
 using RoutineOfPower.Core.SkillHandlers;
 using RoutineOfPower.Core.SkillHandlers.Decorators;
+using RoutineOfPower.GUI;
 
 namespace RoutineOfPower.Core.LogicProviders
 {
@@ -16,7 +18,7 @@ namespace RoutineOfPower.Core.LogicProviders
         private static readonly HashSet<string> BuffNames = new HashSet<string> {"Blood Rage", "Tempest Shield"};
 
         private readonly List<SkillWrapper> buffSlots = new List<SkillWrapper>(8);
-        private IList<Monster> cachedTargets;
+        private readonly BuffLogicSettings settings = new BuffLogicSettings();
 
         public MessageResult Message(Message message)
         {
@@ -27,10 +29,11 @@ namespace RoutineOfPower.Core.LogicProviders
         public string Name { get; set; } = "Buffer";
         public int Priority { get; set; } = 1;
 
-        public UserControl InterfaceControl { get; } = null;
+        public UserControl InterfaceControl { get; private set; }
 
         public void CreateInterfaceControl()
         {
+            InterfaceControl = new BuffLogicGui(settings);
         }
 
         public void Start()
@@ -41,18 +44,16 @@ namespace RoutineOfPower.Core.LogicProviders
                 if (BuffNames.Contains(skill.Name))
                     buffSlots.Add(new SkillWrapper(skill.Slot,
                         new SingleCastHandler().AddDecorator(new DontHaveAuraDecorator(skill.Name))));
-                switch (skill.Name)
+
+                if (skill.IsVaalSkill)
                 {
-                    case "Vaal Grace":
-                        buffSlots.Add(new SkillWrapper(skill.Slot,
-                            new SingleCastHandler().AddDecorator(new ConditionalDecorator(CheckMonsterCount))
+                    var predicate = settings.GetBuffCondition(skill.Name);
+                    buffSlots.Add(new SkillWrapper(skill.Slot, 
+                        new SingleCastHandler()
+                            .AddDecorator(new DontHaveAuraDecorator(skill.Name))
+                            .AddDecorator(new ConditionalDecorator(predicate))
+                            .AddDecorator(new HasVaalSoulsDecorator())
                         ));
-                        break;
-                    case "Vaal Discipline":
-                        buffSlots.Add(new SkillWrapper(skill.Slot,
-                            new SingleCastHandler().AddDecorator(new ConditionalDecorator(EnergyShieldCheck))
-                        ));
-                        break;
                 }
             }
         }
@@ -64,8 +65,6 @@ namespace RoutineOfPower.Core.LogicProviders
 
         public async Task<LogicResult> CombatHandling(IList<Monster> targets)
         {
-            cachedTargets = targets;
-
             if (PoeHelpers.HasDangerousNeighbours(LokiPoe.MyPosition, targets))
                 return LogicResult.Unprovided;
 
@@ -74,20 +73,6 @@ namespace RoutineOfPower.Core.LogicProviders
                     return LogicResult.Provided;
 
             return LogicResult.Unprovided;
-        }
-
-
-        private static bool EnergyShieldCheck(int slot)
-        {
-            return LokiPoe.Me.EnergyShieldPercent <= 60;
-        }
-
-        private bool CheckMonsterCount(int slot)
-        {
-            var bestTarget = cachedTargets.FirstOrDefault();
-            if (bestTarget == null)
-                return false;
-            return bestTarget.Rarity >= Rarity.Rare || PoeHelpers.HasDangerousNeighbours(bestTarget.Position, cachedTargets);
         }
     }
 }

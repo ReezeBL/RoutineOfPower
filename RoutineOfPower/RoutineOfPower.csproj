@@ -44,6 +44,9 @@
     <Reference Include="log4net">
       <HintPath>D:\qq\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="MahApps.Metro, Version=1.5.0.23, Culture=neutral, PublicKeyToken=f4fb5a3c4d1e5b4f, processorArchitecture=MSIL">
+      <HintPath>..\packages\MahApps.Metro.1.5.0\lib\net45\MahApps.Metro.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>D:\qq\Newtonsoft.Json.dll</HintPath>
@@ -53,6 +56,9 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\MahApps.Metro.1.5.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -72,6 +78,7 @@
     <Compile Include="Core\LogicProviders\ILogicHandler.cs" />
     <Compile Include="Core\LogicProviders\OffenseLogic.cs" />
     <Compile Include="Core\LogicProviders\WarcriesLogic.cs" />
+    <Compile Include="Core\Settings\BuffLogicSettings.cs" />
     <Compile Include="Core\Settings\Misc\TriggerSettings.cs" />
     <Compile Include="Core\PoeHelpers.cs" />
     <Compile Include="Core\LogicProviders\SingleTargetLogic.cs" />
@@ -82,6 +89,7 @@
     <Compile Include="Core\Settings\GolemSummonerSettings.cs" />
     <Compile Include="Core\Settings\LogicHandlerSettings.cs" />
     <Compile Include="Core\Settings\LogicSettingsWrapper.cs" />
+    <Compile Include="Core\Settings\Misc\VaalAuraInfo.cs" />
     <Compile Include="Core\Settings\OffenseLogicSettings.cs" />
     <Compile Include="Core\Settings\RoutineSettings.cs" />
     <Compile Include="Core\Settings\TotemLogicSettings.cs" />
@@ -89,6 +97,7 @@
     <Compile Include="Core\SkillHandlers\Decorators\ConditionalDecorator.cs" />
     <Compile Include="Core\SkillHandlers\Decorators\Decorator.cs" />
     <Compile Include="Core\SkillHandlers\Decorators\DontHaveAuraDecorator.cs" />
+    <Compile Include="Core\SkillHandlers\Decorators\HasVaalSoulsDecorator.cs" />
     <Compile Include="Core\SkillHandlers\Decorators\TimeoutDecorator.cs" />
     <Compile Include="Core\SkillHandlers\DefaultSkillHandler.cs" />
     <Compile Include="Core\SkillHandlers\SingleCastHandler.cs" />
@@ -97,6 +106,9 @@
     <Compile Include="Core\TargetHandler.cs" />
     <Compile Include="GUI\AoeTargetGui.xaml.cs">
       <DependentUpon>AoeTargetGui.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\BuffLogicGui.xaml.cs">
+      <DependentUpon>BuffLogicGui.xaml</DependentUpon>
     </Compile>
     <Compile Include="GUI\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -111,10 +123,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
     <Page Include="GUI\AoeTargetGui.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\BuffLogicGui.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

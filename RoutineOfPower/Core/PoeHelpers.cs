@@ -26,6 +26,17 @@ namespace RoutineOfPower.Core
             }
         }
 
+        public static int NumberOfHostileMonstersNear(NetworkObject target, float distance, Rarity rarity)
+        {
+            var targetPosition = target.Position;
+            return LokiPoe.ObjectManager.Objects.OfType<Monster>().Count(monster =>
+                monster.Id != target.Id 
+                && !monster.IsDead
+                && monster.Reaction == Reaction.Enemy
+                && monster.Rarity == rarity
+                && targetPosition.Distance(monster.Position) < distance);
+        }
+
         public static bool EnableAlwaysHiglight()
         {
             if (!LokiPoe.ConfigManager.IsAlwaysHighlightEnabled)
@@ -121,11 +132,11 @@ namespace RoutineOfPower.Core
             {
                 var distance = position.DistanceF(monster.Position);
                 var attackingMe = monster.HasCurrentAction && monster.CurrentAction.Target == LokiPoe.Me;
-                if ((distance <= 40 || attackingMe) && monster.Rarity == Rarity.Normal)
+                if ((distance <= 30 || attackingMe) && monster.Rarity == Rarity.Normal)
                     normalMonstersCount++;
-                else if ((distance <= 50 || attackingMe) && monster.Rarity == Rarity.Magic)
+                else if ((distance <= 40 || attackingMe) && monster.Rarity == Rarity.Magic)
                     magicMonsterCount++;
-                else if ((distance <= 50 || attackingMe) && monster.Rarity == Rarity.Rare)
+                else if ((distance <= 40 || attackingMe) && monster.Rarity == Rarity.Rare)
                     strongMonsterCount++;
             }
 

@@ -27,21 +27,26 @@
             </StackPanel>
         </StackPanel>
         <Expander Header="Logic Handlers">
-            <StackPanel Margin="5">
-                <DataGrid Margin="5" ItemsSource="{Binding LogicHandlers}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedHandler}">
+            <Grid Margin="5">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <DataGrid Grid.Row="0" Margin="5" ItemsSource="{Binding LogicHandlers}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedHandler}">
                     <DataGrid.Columns>
                         <DataGridCheckBoxColumn Header="E" Binding="{Binding Enabled}"/>
                         <DataGridTextColumn Header = "Name" Binding="{Binding Name}" IsReadOnly="True"/>
                         <DataGridTextColumn Header="Priority" Binding="{Binding Priority}" SortDirection="Descending"/>
                     </DataGrid.Columns>
                 </DataGrid>
-                <Border Margin="5" BorderBrush="Black" BorderThickness="2" CornerRadius="4">
-                <StackPanel Margin="5" DataContext ="{Binding SelectedHandler}">
-                    <Label Content="{Binding Name}"></Label>
-                    <ContentPresenter  Margin="5,10,0,0"  Content="{Binding InterfaceControl}" />
-                </StackPanel>
+                <Border Grid.Row="1" Margin="5" BorderBrush="Black" BorderThickness="2" CornerRadius="4">
+                    <StackPanel Margin="5" DataContext ="{Binding SelectedHandler}">
+                        <Label Content="{Binding Name}"></Label>
+                        <ContentPresenter  Margin="5,10,0,0"  Content="{Binding InterfaceControl}" MaxHeight="500"/>
+                    </StackPanel>
                 </Border>
-            </StackPanel>
+            </Grid>
         </Expander>
     </StackPanel>
     <UserControl.Resources>
