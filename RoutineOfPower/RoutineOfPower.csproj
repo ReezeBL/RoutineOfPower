@@ -79,6 +79,7 @@
     <Compile Include="Core\LogicProviders\OffenseLogic.cs" />
     <Compile Include="Core\LogicProviders\WarcriesLogic.cs" />
     <Compile Include="Core\Settings\BuffLogicSettings.cs" />
+    <Compile Include="Core\Settings\Misc\TotemSlotSettings.cs" />
     <Compile Include="Core\Settings\Misc\TriggerSettings.cs" />
     <Compile Include="Core\PoeHelpers.cs" />
     <Compile Include="Core\LogicProviders\SingleTargetLogic.cs" />
@@ -98,8 +99,8 @@
     <Compile Include="Core\SkillHandlers\Decorators\Decorator.cs" />
     <Compile Include="Core\SkillHandlers\Decorators\DontHaveAuraDecorator.cs" />
     <Compile Include="Core\SkillHandlers\Decorators\HasVaalSoulsDecorator.cs" />
+    <Compile Include="Core\SkillHandlers\Decorators\DeployedObjectsDecorator.cs" />
     <Compile Include="Core\SkillHandlers\Decorators\TimeoutDecorator.cs" />
-    <Compile Include="Core\SkillHandlers\DefaultSkillHandler.cs" />
     <Compile Include="Core\SkillHandlers\SingleCastHandler.cs" />
     <Compile Include="Core\SkillHandlers\SkillHandler.cs" />
     <Compile Include="Core\SkillHandlers\SkillWrapper.cs" />
@@ -115,6 +116,9 @@
     </Compile>
     <Compile Include="GUI\SingleTargetGui.xaml.cs">
       <DependentUpon>SingleTargetGui.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\TotemLogicGui.xaml.cs">
+      <DependentUpon>TotemLogicGui.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\AbstractViewer.cs" />
@@ -140,6 +144,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="GUI\SingleTargetGui.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\TotemLogicGui.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

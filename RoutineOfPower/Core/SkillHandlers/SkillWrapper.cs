@@ -1,6 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Reflection.Emit;
+using System.Threading.Tasks;
 using Loki.Common;
 using Loki.Game;
+using Loki.Game.Objects;
 
 namespace RoutineOfPower.Core.SkillHandlers
 {
@@ -8,6 +11,7 @@ namespace RoutineOfPower.Core.SkillHandlers
     {
         private readonly SkillHandler handler;
         private readonly int slot;
+        private readonly Dictionary<string, object> parameters = new Dictionary<string, object>();
 
         public SkillWrapper(int slot, SkillHandler handler)
         {
@@ -25,9 +29,23 @@ namespace RoutineOfPower.Core.SkillHandlers
             return await handler.HandleSkillAt(slot, LokiPoe.MyPosition, true);
         }
 
+        public Skill Skill => PoeHelpers.GetSkillFromSlot(slot);
+
         public bool CanUse()
         {
             return handler.ShouldUse(slot);
+        }
+
+        public void AddParameter(string name, object parameter)
+        {
+            parameters[name] = parameter;
+        }
+
+        public T GetParameter<T>(string name)
+        {
+            if (!parameters.TryGetValue(name, out var parameter))
+                return default(T);
+            return (T)parameter;
         }
     }
 }

@@ -15,6 +15,7 @@ namespace RoutineOfPower.Core
     public static class PoeHelpers
     {
         private static readonly ILog Log = Logger.GetLoggerInstanceForType();
+        private static readonly Random random = new Random();
 
         public static void DisableAlwaysHiglight()
         {
@@ -47,6 +48,14 @@ namespace RoutineOfPower.Core
             }
 
             return false;
+        }
+
+        public static Skill GetSkillFromSlot(int slot)
+        {
+            if (slot == -1)
+                return null;
+            var skill = LokiPoe.InGameState.SkillBarHud.Slot(slot);
+            return skill;
         }
 
         public static IEnumerable<Skill> GetSkillbarSkills(Func<Skill, bool> predicate)
@@ -98,7 +107,7 @@ namespace RoutineOfPower.Core
             if (pathDistance > 2 * RoutineSettings.Instance.CombatRange && !skipPathing)
             {
                 EnableAlwaysHiglight();
-                Blacklist.Add(monsterId, TimeSpan.FromSeconds(10), "Too far");
+                //Blacklist.Add(monsterId, TimeSpan.FromSeconds(10), "Too far");
                 return MoveResult.TargetTooFar;
             }
 
@@ -123,7 +132,7 @@ namespace RoutineOfPower.Core
             return MoveResult.MoveSuccseed;
         }
 
-    public static bool HasDangerousNeighbours(Vector2i position, IEnumerable<Monster> monsters)
+        public static bool HasDangerousNeighbours(Vector2i position, IEnumerable<Monster> monsters)
         {
             var normalMonstersCount = 0;
             var magicMonsterCount = 0;
@@ -146,6 +155,11 @@ namespace RoutineOfPower.Core
             var manyRareMonsters = strongMonsterCount >= 2;
 
             return manyRareMonsters || manyNormalMonsters || manyMagicMonsters;
+        }
+
+        public static Vector2i GetRandomVector(int offset)
+        {
+            return new Vector2i(random.Next(-offset, offset), random.Next(-offset, offset));
         }
 
         private static bool ClosedDoorBetween(NetworkObject start, NetworkObject end, int distanceFromPoint = 10, int stride = 10)

@@ -39,22 +39,20 @@ namespace RoutineOfPower.Core.SkillHandlers
             return decorator;
         }
 
-        protected static Skill ValidateSlot(int slot, bool inSkillBar = true)
+        protected static bool ValidateSlot(int slot, bool inSkillBar = true)
         {
-            if (slot == -1)
-                return null;
-            var skill = LokiPoe.InGameState.SkillBarHud.Slot(slot);
+            var skill = PoeHelpers.GetSkillFromSlot(slot);
 
             if (skill == null)
-                return null;
+                return false;
 
             if (!skill.CanUseEx(out var error, inSkillBar))
             {
                 //Log.Error($"Cant use {skill.Name}: {error}");
-                return null;
+                return false;
             }
 
-            return skill;
+            return true;
         }
 
         public async Task<bool> HandleSkillAt(int slot, Vector2i position, bool inPlace)
@@ -66,8 +64,7 @@ namespace RoutineOfPower.Core.SkillHandlers
 
         public virtual bool ShouldUse(int slot)
         {
-            var skill = ValidateSlot(slot);
-            return skill != null;
+            return ValidateSlot(slot);
         }
 
         public abstract Task<bool> UseAt(int slot, Vector2i position, bool inPlace);

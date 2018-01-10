@@ -67,9 +67,9 @@ namespace RoutineOfPower.GUI
         }
     }
 
-    public class VisibilityConverter : IValueConverter
+    public class TriggerVisibilityConverter : IValueConverter
     {
-        public static readonly VisibilityConverter Instance = new VisibilityConverter();
+        public static readonly TriggerVisibilityConverter Instance = new TriggerVisibilityConverter();
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

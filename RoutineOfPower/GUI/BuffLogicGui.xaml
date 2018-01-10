@@ -66,14 +66,14 @@
                                VerticalAlignment="Center"
                                Text="HP%"
                                ToolTip="Aura will be used if your HP percent is below specified value"
-                               Visibility="{Binding ElementName=TriggerTypeComboBox, Path=SelectedItem, Converter={x:Static local:VisibilityConverter.Instance}, ConverterParameter=Hp}" />
+                               Visibility="{Binding ElementName=TriggerTypeComboBox, Path=SelectedItem, Converter={x:Static local:TriggerVisibilityConverter.Instance}, ConverterParameter=Hp}" />
 
                     <mahapps:NumericUpDown Grid.Row="0"
                                            Grid.Column="1"
                                            Margin="5,5,0,0"
                                            Maximum="95"
                                            Minimum="5"
-                                           Visibility="{Binding ElementName=TriggerTypeComboBox, Path=SelectedItem, Converter={x:Static local:VisibilityConverter.Instance}, ConverterParameter=Hp}"
+                                           Visibility="{Binding ElementName=TriggerTypeComboBox, Path=SelectedItem, Converter={x:Static local:TriggerVisibilityConverter.Instance}, ConverterParameter=Hp}"
                                            Value="{Binding Path=MyHpPercent}" />
 
                     <TextBlock Grid.Row="1"
@@ -81,15 +81,15 @@
                                                                    Margin="0,5,0,0"
                                                                    VerticalAlignment="Center"
                                                                    Text="ES%"
-                                                                   ToolTip="Flask will be used if your ES percent is below specified value"
-                                                                   Visibility="{Binding ElementName=TriggerTypeComboBox, Path=SelectedItem, Converter={x:Static local:VisibilityConverter.Instance}, ConverterParameter=Es}" />
+                                                                   ToolTip="Aura will be used if your ES percent is below specified value"
+                                                                   Visibility="{Binding ElementName=TriggerTypeComboBox, Path=SelectedItem, Converter={x:Static local:TriggerVisibilityConverter.Instance}, ConverterParameter=Es}" />
 
                     <mahapps:NumericUpDown Grid.Row="1"
                                                                                Grid.Column="1"
                                                                                Margin="5,5,0,0"
                                                                                Maximum="95"
                                                                                Minimum="5"
-                                                                               Visibility="{Binding ElementName=TriggerTypeComboBox, Path=SelectedItem, Converter={x:Static local:VisibilityConverter.Instance}, ConverterParameter=Es}"
+                                                                               Visibility="{Binding ElementName=TriggerTypeComboBox, Path=SelectedItem, Converter={x:Static local:TriggerVisibilityConverter.Instance}, ConverterParameter=Es}"
                                                                                Value="{Binding Path=MyEsPercent}" />
 
                     <TextBlock Grid.Row="2"
@@ -98,14 +98,14 @@
                                                                    VerticalAlignment="Center"
                                                                    Text="Rarity"
                                                                    ToolTip="Monster's rarity"
-                                                                   Visibility="{Binding ElementName=TriggerTypeComboBox, Path=SelectedItem, Converter={x:Static local:VisibilityConverter.Instance}, ConverterParameter=MobsOrAttack}" />
+                                                                   Visibility="{Binding ElementName=TriggerTypeComboBox, Path=SelectedItem, Converter={x:Static local:TriggerVisibilityConverter.Instance}, ConverterParameter=MobsOrAttack}" />
 
                     <ComboBox Grid.Row="2"
                                                                   Grid.Column="1"
                                                                   Margin="5,5,0,0"
                                                                   ItemsSource="{x:Static misc:TriggerSettings.Rarities}"
                                                                   SelectedItem="{Binding Path=MobRarity}"
-                                                                  Visibility="{Binding ElementName=TriggerTypeComboBox, Path=SelectedItem, Converter={x:Static local:VisibilityConverter.Instance}, ConverterParameter=MobsOrAttack}" />
+                                                                  Visibility="{Binding ElementName=TriggerTypeComboBox, Path=SelectedItem, Converter={x:Static local:TriggerVisibilityConverter.Instance}, ConverterParameter=MobsOrAttack}" />
 
 
                     <TextBlock Grid.Row="3"
@@ -114,14 +114,14 @@
                                                                    VerticalAlignment="Center"
                                                                    Text="Range"
                                                                    ToolTip="Monsters must be within specified range around you"
-                                                                   Visibility="{Binding ElementName=TriggerTypeComboBox, Path=SelectedItem, Converter={x:Static local:VisibilityConverter.Instance}, ConverterParameter=Mobs}" />
+                                                                   Visibility="{Binding ElementName=TriggerTypeComboBox, Path=SelectedItem, Converter={x:Static local:TriggerVisibilityConverter.Instance}, ConverterParameter=Mobs}" />
 
                     <mahapps:NumericUpDown Grid.Row="3"
                                                                                Grid.Column="1"
                                                                                Margin="5,5,0,0"
                                                                                Maximum="250"
                                                                                Minimum="5"
-                                                                               Visibility="{Binding ElementName=TriggerTypeComboBox, Path=SelectedItem, Converter={x:Static local:VisibilityConverter.Instance}, ConverterParameter=Mobs}"
+                                                                               Visibility="{Binding ElementName=TriggerTypeComboBox, Path=SelectedItem, Converter={x:Static local:TriggerVisibilityConverter.Instance}, ConverterParameter=Mobs}"
                                                                                Value="{Binding Path=MobRange}" />
 
                     <TextBlock Grid.Row="4"
@@ -130,13 +130,13 @@
                                                                    VerticalAlignment="Center"
                                                                    Text="Count"
                                                                    ToolTip="Minimum monster count in range"
-                                                                   Visibility="{Binding ElementName=TriggerTypeComboBox, Path=SelectedItem, Converter={x:Static local:VisibilityConverter.Instance}, ConverterParameter=Mobs}" />
+                                                                   Visibility="{Binding ElementName=TriggerTypeComboBox, Path=SelectedItem, Converter={x:Static local:TriggerVisibilityConverter.Instance}, ConverterParameter=Mobs}" />
 
                     <mahapps:NumericUpDown Grid.Row="4"
                                                                                Grid.Column="1"
                                                                                Margin="5,5,0,0"
                                                                                Minimum="1"
-                                                                               Visibility="{Binding ElementName=TriggerTypeComboBox, Path=SelectedItem, Converter={x:Static local:VisibilityConverter.Instance}, ConverterParameter=Mobs}"
+                                                                               Visibility="{Binding ElementName=TriggerTypeComboBox, Path=SelectedItem, Converter={x:Static local:TriggerVisibilityConverter.Instance}, ConverterParameter=Mobs}"
                                                                                Value="{Binding Path=MobCount}" />
 
                 </Grid>
